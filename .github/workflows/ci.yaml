@@ -52,15 +52,7 @@ jobs:
     
     - name: Show build log
       run: type ${{ matrix.config.log }}
-
-    - name: Test
-      run: |
-        .\build\emocheck.exe /quiet
-        type *emocheck.txt
-        .\build\emocheck.exe /quiet /json
-        type *emocheck.json
-      shell: powershell
-    
+   
     - name: Archive build results
       uses: actions/upload-artifact@v2
       with:
