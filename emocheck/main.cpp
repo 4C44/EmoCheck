@@ -161,38 +161,29 @@ void WriteReport(std::vector<EmotetProcess> emotet_processes, bool is_quiet, std
     std::strftime(time_iso8601, 20, "%Y-%m-%d %H:%M:%S", &local_time);
     std::strftime(time_file, 16, "%Y%m%d%H%M%S", &local_time);
 
-    filename += output_path;
-    filename += "\\";
-    filename += std::string(hostname);
-    filename += std::string("_");
-    filename += std::string(time_file);
-    filename += std::string("_emocheck.txt");
-
-    std::ofstream outputfile(filename.c_str());
-
     if (GetUserDefaultLangID() == LANG_ID_JP && !IsWindows7()) {
         // Japanese Report
-        outputfile << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
-        outputfile << "プログラム実行時刻: " << time_iso8601 << std::endl;
-        outputfile << LINE_DELIMITER << std::endl;
+        std::cout << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
+        std::cout << "プログラム実行時刻: " << time_iso8601 << std::endl;
+        std::cout << LINE_DELIMITER << std::endl;
         if (emotet_processes.size() > 0) {
-            outputfile << "[結果]\n"
+            std::cout << "[結果]\n"
                        << "Emotetを検知しました。\n"
                        << std::endl;
             for (unsigned int i = 0; i < emotet_processes.size(); ++i) {
-                outputfile << "[詳細]\n"
+                std::cout << "[詳細]\n"
                            << "     プロセス名    : " << emotet_processes[i].process_name << "\n"
                            << "     プロセスID    : " << emotet_processes[i].pid << "\n"
                            << "     イメージパス  : " << emotet_processes[i].image_path << "\n"
                            << "     レジストリキー: " << emotet_processes[i].run_key << std::endl;
             }
-            outputfile << LINE_DELIMITER << std::endl;
-            outputfile << "イメージパスの実行ファイルを隔離/削除してください。" << std::endl;
+            std::cout << LINE_DELIMITER << std::endl;
+            std::cout << "イメージパスの実行ファイルを隔離/削除してください。" << std::endl;
         } else {
-            outputfile << "[結果]\n"
+            std::cout << "[結果]\n"
                        << "検知しませんでした。" << std::endl;
         }
-        outputfile.close();
+
         if (!is_quiet) {
             std::cout.imbue(std::locale(""));
             std::cout << "以下のファイルに結果を出力しました。" << std::endl;
@@ -203,59 +194,43 @@ void WriteReport(std::vector<EmotetProcess> emotet_processes, bool is_quiet, std
         }
     } else if (GetUserDefaultLangID() == LANG_ID_FR && !IsWindows7()) {
         // French Report
-        outputfile << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
-        outputfile << "Temps d'éxécution: " << time_iso8601 << std::endl;
-        outputfile << LINE_DELIMITER << std::endl;
+        std::cout << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
+        std::cout << "Temps d'éxécution: " << time_iso8601 << std::endl;
+        std::cout << LINE_DELIMITER << std::endl;
         if (emotet_processes.size() > 0) {
-            outputfile << "[Résultat] \nEmotet détecté.\n"
+            std::cout << "[Résultat] \nEmotet détecté.\n"
                        << std::endl;
             for (unsigned int i = 0; i < emotet_processes.size(); ++i) {
-                outputfile << "[Processus Emotet] \n"
+                std::cout << "[Processus Emotet] \n"
                            << "     Nom du processus: " << emotet_processes[i].process_name << "\n"
                            << "     PID             : " << emotet_processes[i].pid << "\n"
                            << "     Emplacement     : " << emotet_processes[i].image_path << "\n"
                            << "     Clé de registre : " << emotet_processes[i].run_key << std::endl;
             }
-            outputfile << LINE_DELIMITER << std::endl;
-            outputfile << "Veuillez supprimer le(s) fichier(s) détecté(s)." << std::endl;
+            std::cout << LINE_DELIMITER << std::endl;
+            std::cout << "Veuillez supprimer le(s) fichier(s) détecté(s)." << std::endl;
         } else {
-            outputfile << "[Résultat] \nEmotet n'a pas été détecté." << std::endl;
-        }
-        outputfile.close();
-        if (!is_quiet) {
-            std::cout << "Le rapport a été exporté dans le fichier suivant." << std::endl;
-            std::cout << "\n\t" << filename << "\n"
-                      << std::endl;
-            std::cout << "Merci d'avoir utilisé cet outil.\n"
-                      << std::endl;
+            std::cout << "[Résultat] \nEmotet n'a pas été détecté." << std::endl;
         }
     } else {
         // English Report
-        outputfile << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
-        outputfile << "Scan time: " << time_iso8601 << std::endl;
-        outputfile << LINE_DELIMITER << std::endl;
+        std::cout << "[EmoCheck v" << EMOCHECK_VERSION << "]" << std::endl;
+        std::cout << "Scan time: " << time_iso8601 << std::endl;
+        std::cout << LINE_DELIMITER << std::endl;
         if (emotet_processes.size() > 0) {
-            outputfile << "[Result] \nDetected Emotet process.\n"
+            std::cout << "[Result] \nDetected Emotet process.\n"
                        << std::endl;
             for (unsigned int i = 0; i < emotet_processes.size(); ++i) {
-                outputfile << "[Emotet Process] \n"
+                std::cout << "[Emotet Process] \n"
                            << "     Process Name  : " << emotet_processes[i].process_name << "\n"
                            << "     Process ID    : " << emotet_processes[i].pid << "\n"
                            << "     Image Path    : " << emotet_processes[i].image_path << "\n"
                            << "     Registry Key  : " << emotet_processes[i].run_key << std::endl;
             }
-            outputfile << LINE_DELIMITER << std::endl;
-            outputfile << "Please remove or isolate the suspicious execution file." << std::endl;
+            std::cout << LINE_DELIMITER << std::endl;
+            std::cout << "Please remove or isolate the suspicious execution file." << std::endl;
         } else {
-            outputfile << "[Result] \nEmotet was not detected." << std::endl;
-        }
-        outputfile.close();
-        if (!is_quiet) {
-            std::cout << "Report has exported to following file." << std::endl;
-            std::cout << "\n\t" << filename << "\n"
-                      << std::endl;
-            std::cout << "Thank you for using our tool.\n"
-                      << std::endl;
+            std::cout << "[Result] \nEmotet was not detected." << std::endl;
         }
     }
 }
@@ -281,58 +256,26 @@ void JsonReport(std::vector<EmotetProcess> emotet_processes, bool is_quiet, std:
     std::strftime(time_iso8601, 20, "%Y-%m-%d %H:%M:%S", &local_time);
     std::strftime(time_file, 16, "%Y%m%d%H%M%S", &local_time);
 
-    filename += output_path;
-    filename += "\\";
-    filename += std::string(hostname);
-    filename += std::string("_");
-    filename += std::string(time_file);
-    filename += std::string("_emocheck.json");
-
-    std::ofstream outputfile(filename.c_str());
-
-    outputfile << "{\n  \"scan_time\":\"" << time_iso8601 << "\",\n"
+    std::cout << "{\n  \"scan_time\":\"" << time_iso8601 << "\",\n"
                << "  \"hostname\":\"" << hostname << "\",\n"
                << "  \"emocheck_version\":\"" << EMOCHECK_VERSION << "\"," << std::endl;
     if (emotet_processes.size() > 0) {
         outputfile << "  \"is_infected\":\"yes\",\n  \"emotet_processes\":[" << std::endl;
         for (unsigned int i = 0; i < emotet_processes.size(); ++i) {
-            outputfile << "    {\n"
+            std::cout << "    {\n"
                        << "      \"process_name\":\"" << emotet_processes[i].process_name << "\",\n"
                        << "      \"process_id\":\"" << emotet_processes[i].pid << "\",\n"
                        << "      \"image_path\":\"" << EscapeBackSlash(emotet_processes[i].image_path) << "\",\n"
                        << "      \"registry_key\":\"" << EscapeBackSlash(emotet_processes[i].run_key) << "\"" << std::endl;
             if (i == emotet_processes.size() - 1) {
-                outputfile << "    }" << std::endl;
+                std::cout << "    }" << std::endl;
             } else {
-                outputfile << "    }," << std::endl;
+                std::cout << "    }," << std::endl;
             }
         }
-        outputfile << "  ]\n}" << std::endl;
+        std::cout << "  ]\n}" << std::endl;
     } else {
-        outputfile << "  \"is_infected\":\"no\"\n}" << std::endl;
-    }
-    outputfile.close();
-    if (!is_quiet) {
-        if (GetUserDefaultLangID() == LANG_ID_JP && !IsWindows7()) {
-            std::cout.imbue(std::locale(""));
-            std::cout << "以下のファイルに結果を出力しました。" << std::endl;
-            std::cout << "\n\t" << filename << "\n"
-                      << std::endl;
-            std::cout << "ツールのご利用ありがとうございました。\n"
-                      << std::endl;
-        } else if (GetUserDefaultLangID() == LANG_ID_FR && !IsWindows7()) {
-            std::cout << "Le rapport a été exporté dans le fichier suivant." << std::endl;
-            std::cout << "\n\t" << filename << "\n"
-                      << std::endl;
-            std::cout << "Merci d'avoir utilisé cet outil.\n"
-                      << std::endl;
-        } else {
-            std::cout << "Report has exported to following file." << std::endl;
-            std::cout << "\n\t" << filename << "\n"
-                      << std::endl;
-            std::cout << "Thank you for using our tool.\n"
-                      << std::endl;
-        }
+        std::cout << "  \"is_infected\":\"no\"\n}" << std::endl;
     }
     return;
 }
@@ -366,16 +309,6 @@ int main(int argc, char *argv[]) {
                 // is_debug = true;
             } else if (!strcmp(param, PARAM_JSON)) {
                 is_json = true;
-            } else if (!strcmp(param, PARAM_OUTPUT)) {
-                const char *next_param = &argv[i + 1][0];
-                if (std::filesystem::exists(std::string(next_param))) {
-                    output_path = std::string(next_param);
-                    i++;
-                } else {
-                    std::cout << "Invalid output path: " << next_param << std::endl;
-                    std::cout << "Report will be generated on current directory," << std::endl;
-                    i++;
-                }
             } else if (!strcmp(param, PARAM_HELP)) {
                 emocheck::PrintBanner();
                 emocheck::PrintHelp();
