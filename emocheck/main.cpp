@@ -260,7 +260,7 @@ void JsonReport(std::vector<EmotetProcess> emotet_processes, bool is_quiet, std:
                << "  \"hostname\":\"" << hostname << "\",\n"
                << "  \"emocheck_version\":\"" << EMOCHECK_VERSION << "\"," << std::endl;
     if (emotet_processes.size() > 0) {
-        outputfile << "  \"is_infected\":\"yes\",\n  \"emotet_processes\":[" << std::endl;
+        std::cout  << "  \"is_infected\":\"yes\",\n  \"emotet_processes\":[" << std::endl;
         for (unsigned int i = 0; i < emotet_processes.size(); ++i) {
             std::cout << "    {\n"
                        << "      \"process_name\":\"" << emotet_processes[i].process_name << "\",\n"
